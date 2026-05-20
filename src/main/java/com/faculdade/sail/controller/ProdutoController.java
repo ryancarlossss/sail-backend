@@ -7,10 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/produtos")
-@CrossOrigin("*") 
+@CrossOrigin(origins = "*") 
+
+
+
+
+
+
+
+
+
+
 public class ProdutoController {
 
     @Autowired
@@ -47,6 +56,18 @@ public class ProdutoController {
             return ResponseEntity.ok("Produto removido do estoque com sucesso!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao remover produto.");
+        }
+    }
+
+
+    
+    @PutMapping("/{id}/vender/{quantidadeVendida}")
+    public ResponseEntity<?> venderProduto(@PathVariable Long id, @PathVariable Integer quantidadeVendida) {
+        try {
+            Produto produtoAtualizado = service.venderProduto(id, quantidadeVendida);
+            return ResponseEntity.ok(produtoAtualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

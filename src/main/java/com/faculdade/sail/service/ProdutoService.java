@@ -37,4 +37,21 @@ public class ProdutoService {
     public void deletarProduto(Long id) {
         repository.deleteById(id);
     }
+
+
+    
+    public Produto venderProduto(Long id, Integer quantidadeVendida) {
+        return repository.findById(id).map(produto -> {
+            
+            if (produto.getQuantidade() < quantidadeVendida) {
+                throw new RuntimeException("Estoque insuficiente para essa venda!");
+            }
+            
+            
+            produto.setQuantidade(produto.getQuantidade() - quantidadeVendida);
+            
+            
+            return repository.save(produto);
+        }).orElseThrow(() -> new RuntimeException("Produto não encontrado no estoque!"));
+    }
 }
