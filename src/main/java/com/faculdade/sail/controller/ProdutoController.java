@@ -22,6 +22,23 @@ import java.util.List;
 
 public class ProdutoController {
 
+
+    @PostMapping("/{id}/vender")
+public ResponseEntity<Produto> vender(@PathVariable Long id, @RequestParam Integer quantidade) {
+    try {
+        
+        Produto produtoVendido = service.venderProduto(id, quantidade);
+        return ResponseEntity.ok(produtoVendido);
+    } catch (RuntimeException e) {
+        
+        return ResponseEntity.badRequest().build(); 
+    }
+
+
+
+   
+}
+
     @Autowired
     private ProdutoService service;
 
