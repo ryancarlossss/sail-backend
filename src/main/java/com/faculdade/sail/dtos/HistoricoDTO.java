@@ -3,13 +3,13 @@ package com.faculdade.sail.dtos;
 import java.math.BigDecimal;
 import java.util.List;
 
-// Aqui apresentamos a classe Registro para o HistoricoDTO
+
 import com.faculdade.sail.model.Registro;
 
 public class HistoricoDTO {
 
-    private BigDecimal totalDoMes; // Vai alimentar a cor AMARELA na tela
-    private List<Registro> lancamentos; // Vai alimentar a cor ROSA na tela
+    private BigDecimal totalDoMes; 
+    private List<Registro> lancamentos; 
 
     public HistoricoDTO(BigDecimal totalDoMes, List<Registro> lancamentos) {
         this.totalDoMes = totalDoMes;

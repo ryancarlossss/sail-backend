@@ -19,19 +19,20 @@ public class HistoricoController {
 
     @GetMapping
     public ResponseEntity<HistoricoDTO> obterHistorico(
-            @RequestParam int mes,
-            @RequestParam int ano) {
+            @RequestParam(required = false, defaultValue = "0") int mes,
+            @RequestParam(required = false, defaultValue = "0") int ano) {
 
         
-        List<Registro> lancamentos = registroRepository.buscarVendasPorMesEAno(mes, ano);
+        List<Registro> lancamentos = registroRepository.findAll();
 
-        
         BigDecimal totalDoMes = BigDecimal.ZERO;
         for (Registro registro : lancamentos) {
-            totalDoMes = totalDoMes.add(registro.getValorTotal());
+            
+            if (registro.getValorTotal() != null) {
+                totalDoMes = totalDoMes.add(registro.getValorTotal());
+            }
         }
 
-        
         HistoricoDTO historicoDTO = new HistoricoDTO(totalDoMes, lancamentos);
 
         return ResponseEntity.ok(historicoDTO);
