@@ -64,6 +64,24 @@ class ApiFluxosTests {
     private static final String SENHA = "Senha exclusiva de teste";
 
     @Test
+    void documentacaoExigeAutenticacao() throws Exception {
+        mvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.codigo").value("SESSAO_INVALIDA"));
+    }
+
+    @Test
+    void documentacaoAutenticadaDescreveContratosDaApi() throws Exception {
+        Acesso acesso = acesso();
+        MvcResult resultado = mvc.perform(get("/v3/api-docs").header("Authorization", acesso.authorization()))
+                .andExpect(status().isOk()).andReturn();
+        JsonNode documento = arvore(resultado);
+        assertThat(documento.get("openapi").asString()).startsWith("3.");
+        assertThat(documento.get("paths").has("/produtos")).isTrue();
+        assertThat(documento.get("paths").has("/usuarios/login")).isTrue();
+    }
+
+    @Test
     void exigeAutenticacaoSemExporDetalhes() throws Exception {
         mvc.perform(get("/produtos"))
                 .andExpect(status().isUnauthorized())
